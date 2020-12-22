@@ -33,8 +33,8 @@ pipeline {
 
       }
       when {
-       branch 'master' 
-      } 
+        branch 'master'
+      }
       steps {
         sh 'mvn package -DskipTests'
         archiveArtifacts 'target/*war'
@@ -44,8 +44,8 @@ pipeline {
     stage('Docker Build and Publish') {
       agent any
       when {
-       branch 'master' 
-      }  
+        branch 'master'
+      }
       steps {
         script {
           docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
@@ -56,6 +56,13 @@ pipeline {
           }
         }
 
+      }
+    }
+
+    stage('deploy to dev') {
+      agent any
+      steps {
+        sh 'docker-compose up -d'
       }
     }
 
